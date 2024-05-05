@@ -1,0 +1,33 @@
+services:
+  postgresdb:
+    image: postgres:14.1-alpine
+    restart: always
+    environment:
+      POSTGRES_DATABASE: witingdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./docker-init-scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  mysqldb:
+    image: mariadb:10.5.8
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - '3306:3306'
+    expose:
+      # Opens port 3306 on the container
+      - '3306'
+      # Where our data will be persisted
+    volumes:
+      - mariadb-db:/var/lib/mysql
+
+# Names our volume
+volumes:
+  mariadb-db:
